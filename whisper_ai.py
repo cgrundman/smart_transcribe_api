@@ -3,7 +3,7 @@ import json
 
 
 def ai_output():
-    audio = whisper.load_audio("AUDIO.wav")
+    audio = whisper.load_audio("/audio/words.wav")
 
     model = whisper.load_model("tiny", device="cpu")
 

@@ -1,9 +1,10 @@
 import whisper_timestamped as whisper
 import json
+import os
 
 
 def ai_output():
-    audio = whisper.load_audio("/audio/words.wav")
+    audio = whisper.load_audio("./audio/words.wav")
 
     model = whisper.load_model("tiny", device="cpu")
 
@@ -11,5 +12,4 @@ def ai_output():
 
     return print(json.dumps(result, indent=2, ensure_ascii=False))
 
-
-help(whisper.transcribe)
+# help(whisper.load_audio)

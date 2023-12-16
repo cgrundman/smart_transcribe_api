@@ -1,6 +1,9 @@
 # import json
 from flask import Flask, jsonify  # , request, render_template, redirect
 import whisper_ai
+import whisper_timestamped as whisper
+import os
+from scipy.io import wavfile
 
 # app = Flask(__name__)
 #
@@ -26,4 +29,7 @@ import whisper_ai
 # if __name__ == '__main__':
 #     app.run(port=5000, debug=True)
 
-whisper_ai.ai_output()
+# help(whisper.load_audio)
+samplerate, data = wavfile.read("./audio/words.wav")
+
+# whisper_ai.ai_output()

@@ -1,36 +1,59 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 
-from whisper_ai import TranscribeAudio
+import whisper_timestamped as whisper
 
 from transformers import pipeline
 
 
+# TODO add comments to all code files
 app = Flask(__name__)
 
-employees = [{'id': 1, 'name': 'Ashley'},
-             {'id': 2, 'name': 'Kate'},
-             {'id': 3, 'name': 'Joe'}]
 
-things = [{'id': 1, 'name': 'Banana'},
-          {'id': 2, 'name': 'Apple'},
-          {'id': 3, 'name': 'Pear'}]
-
-
-@app.route('/employees', methods=['GET'])
-def get_employees():
-    return jsonify(employees)
+# TODO add more files
+# List of all available audio files to transcribe
+audio_files = [{'file': "./audio/bonjour.wav",
+                'language': "fr"},
+               {'file': "./audio/smartphone.mp3",
+                'language': "fr"},
+               {'file': "./audio/gloria.mp3",
+                'language': "en"}]
 
 
+# TODO automate routing
+# Initial Path
 @app.route('/', methods=['GET'])
-def sentiment():
-    sentiment_pipeline = pipeline("sentiment-analysis")
-    transcription = TranscribeAudio().output()['text']
-    transcript_list = transcription.split(".")
-    # data = ["I love you", "I hate you"]
-    analysis = sentiment_pipeline(transcript_list)
-    for idx in range(len(analysis)):
-        analysis[idx]['value'] = transcript_list[idx]
-    return analysis
+def home():
+    return render_template("index.html")
+
+
+@app.route('/transcribe/<int:file>', methods=['GET'])
+def transcription(file):
+    model = whisper.load_model("tiny", device="cpu")
+    text = whisper.transcribe(model=model, audio=audio_files[file]['file'], language=audio_files[file]['language'])
+    return render_template("transcribe.html", text=text['text'])
+
+
+@app.route('/transcribe/<int:file>/analyze', methods=['GET'])
+def analysis(file, text):
+    # transcript_list = text.split(".")
+    # sentiment_pipeline = pipeline("sentiment-analysis")
+    # analysis = sentiment_pipeline(transcript_list)
+    return render_template("analyze.html", analysis=text, file=file)
+
+
+# TODO split into two routes, one for each ai
+# @app.route('/sentimate', methods=['GET'])
+# def sentiment():
+#     sentiment_pipeline = pipeline("sentiment-analysis")
+#     transcription = whisper_ai.output()['text']
+#     transcript_list = transcription.split(".")
+#     analysis = sentiment_pipeline(transcript_list)
+#     for idx in range(len(analysis)):
+#         analysis[idx]['value'] = transcript_list[idx]
+#     return analysis
+
+
+# TODO add a third route for a third ai
 
 
 if __name__ == '__main__':

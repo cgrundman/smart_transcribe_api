@@ -21,7 +21,7 @@ audio_files = [{'file': "./audio/bonjour.wav",
 # Home page - displays sound file options for transcribing
 @app.route('/', methods=['GET'])
 def home():
-    return render_template("index.html")
+    return render_template("index.html", files=audio_files, num_files=len(audio_files))
 
 
 # Transcription page - displays transcription of selected sound file

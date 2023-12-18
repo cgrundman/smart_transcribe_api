@@ -8,7 +8,6 @@ from transformers import pipeline
 # TODO add comments to all code files
 app = Flask(__name__)
 
-
 # TODO add more files
 # List of all available audio files to transcribe
 audio_files = [{'file': "./audio/bonjour.wav",
@@ -29,19 +28,42 @@ def home():
 # Transcription page - displays transcription of selected sound file
 @app.route('/transcribe/<int:file>', methods=['GET'])
 def transcription(file):
+    # Load the whisper_timestamped model
     model = whisper.load_model("tiny", device="cpu")
-    text = whisper.transcribe(model=model, audio=str(audio_files[file]['file']), language=audio_files[file]['language'])
-    # return render_template("transcribe.html", text=text['text'])
-    return render_template("transcribe.html", text=text['text'], file=file), text
+
+    # Pass the audio file and the language into the model, save the output
+    audio_transcript = whisper.transcribe(model=model, audio=str(audio_files[file]['file']), language=audio_files[file]['language'])
+
+    # Add text output from model into the audio file dictionary
+    audio_files[file]['text'] = audio_transcript['text']
+
+    return render_template("transcribe.html",
+                           text=audio_files[file]['text'],
+                           file=file)
 
 
 # Analysis page - displays sentiment analysis of transcription
 @app.route('/transcribe/<int:file>/analyze', methods=['GET'])
-def analysis(file, text):
-    # transcript_list = text.split(".")
-    # sentiment_pipeline = pipeline("sentiment-analysis")
-    # analysis = sentiment_pipeline(transcript_list)
-    return render_template("analyze.html", analysis=text, file=audio_files[file]['file'][8:])
+def analysis(file):
+    # Split full transcript into a list of sentences
+    transcript_list = audio_files[file]['text'].split(".")
+
+    # Assert the list as a string and add into the dictionary
+    audio_files[file]['sentence_list'] = str(transcript_list)
+
+    # Load the hugging face model for sentiment analysis
+    sentiment_pipeline = pipeline("sentiment-analysis")
+
+    # Pass the sentence list into the hugging face model, analyze on a sentence by sentence basis
+    analysis = sentiment_pipeline(transcript_list)
+
+    # Save sentiments into dictionary
+    audio_files[file]['sentiment'] = str(analysis)
+
+    return render_template("analyze.html",
+                           transcript=audio_files[file]['sentence_list'],
+                           analysis=audio_files[file]['sentiment'],
+                           file=audio_files[file]['file'][8:])
 
 
 # TODO split into two routes, one for each ai

@@ -17,7 +17,6 @@ audio_files = [{'file': "./audio/bonjour.wav",
                 'language': "en"}]
 
 
-# TODO automate routing
 # Home page - displays sound file options for transcribing
 @app.route('/', methods=['GET'])
 def home():
@@ -60,11 +59,14 @@ def analysis(file):
     # Save sentiments into dictionary
     audio_files[file]['sentiment'] = str(analysis)
 
+    print(int(len(list(audio_files[file]['sentence_list']))))
+
     return render_template("analyze.html",
-                           transcript=audio_files[file]['sentence_list'],
-                           analysis=audio_files[file]['sentiment'],
+                           transcript=list(audio_files[file]['sentence_list']),
+                           analysis=list(audio_files[file]['sentiment']),
                            file=audio_files[file]['file'][8:],
-                           file_idx=file)
+                           file_idx=file,
+                           num_sentences=int(len(list(audio_files[file]['sentence_list']))))
 
 
 # TODO add a third route for a third ai

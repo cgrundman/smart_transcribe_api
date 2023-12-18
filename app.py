@@ -5,7 +5,6 @@ import whisper_timestamped as whisper
 from transformers import pipeline
 
 
-# TODO add comments to all code files
 app = Flask(__name__)
 
 # TODO add more files
@@ -32,14 +31,15 @@ def transcription(file):
     model = whisper.load_model("tiny", device="cpu")
 
     # Pass the audio file and the language into the model, save the output
-    audio_transcript = whisper.transcribe(model=model, audio=str(audio_files[file]['file']), language=audio_files[file]['language'])
+    audio_transcript = whisper.transcribe(model=model, audio=audio_files[file]['file'], language=audio_files[file]['language'])
 
     # Add text output from model into the audio file dictionary
     audio_files[file]['text'] = audio_transcript['text']
 
     return render_template("transcribe.html",
                            text=audio_files[file]['text'],
-                           file=file)
+                           file=audio_files[file]['file'][8:],
+                           file_idx=file)
 
 
 # Analysis page - displays sentiment analysis of transcription
@@ -63,19 +63,8 @@ def analysis(file):
     return render_template("analyze.html",
                            transcript=audio_files[file]['sentence_list'],
                            analysis=audio_files[file]['sentiment'],
-                           file=audio_files[file]['file'][8:])
-
-
-# TODO split into two routes, one for each ai
-# @app.route('/sentimate', methods=['GET'])
-# def sentiment():
-#     sentiment_pipeline = pipeline("sentiment-analysis")
-#     transcription = whisper_ai.output()['text']
-#     transcript_list = transcription.split(".")
-#     analysis = sentiment_pipeline(transcript_list)
-#     for idx in range(len(analysis)):
-#         analysis[idx]['value'] = transcript_list[idx]
-#     return analysis
+                           file=audio_files[file]['file'][8:],
+                           file_idx=file)
 
 
 # TODO add a third route for a third ai

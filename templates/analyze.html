@@ -2,13 +2,16 @@
 {% block title %}Home Page{% endblock %}
 {% block content %}
 <h2>Sentiment Analysis of {{ file }}</h2>
-<!--TODO add for loop to iterate through all sentences and display sentences and sentiments-->
-{% for i in range(num_files) %}
-<a>{{ transcript }}</a>
+{% for i in range(num_sentences) %}
+<a>"{{ transcript[i] }}"</a>
 <br>
-<a>{{ analysis }}</a>
+<a>{{ analysis[i] }}</a>
+<br>
+<br>
 {%endfor%}
-
+<button type="button">
+    <a href="/">Start Over</a>
+</button>
 <!--<br>-->
 <!--<br>-->
 <!--<button type="button">-->

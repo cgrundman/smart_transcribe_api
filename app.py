@@ -7,13 +7,16 @@ from transformers import pipeline
 
 app = Flask(__name__)
 
-# TODO add more files
 # List of all available audio files to transcribe
 audio_files = [{'file': "./audio/bonjour.wav",
                 'language': "fr"},
                {'file': "./audio/smartphone.mp3",
                 'language': "fr"},
                {'file': "./audio/gloria.mp3",
+                'language': "en"},
+               {'file': "./audio/apollo11.mp3",
+                'language': "en"},
+               {'file': "./audio/bonjour_vous_allez_bien.mp3",
                 'language': "en"}]
 
 
@@ -54,19 +57,17 @@ def analysis(file):
     sentiment_pipeline = pipeline("sentiment-analysis")
 
     # Pass the sentence list into the hugging face model, analyze on a sentence by sentence basis
-    analysis = sentiment_pipeline(transcript_list)
+    sent_analysis = sentiment_pipeline(transcript_list)
 
     # Save sentiments into dictionary
-    audio_files[file]['sentiment'] = str(analysis)
-
-    print(int(len(list(audio_files[file]['sentence_list']))))
+    audio_files[file]['sentiment'] = str(sent_analysis)
 
     return render_template("analyze.html",
-                           transcript=list(audio_files[file]['sentence_list']),
-                           analysis=list(audio_files[file]['sentiment']),
+                           transcript=transcript_list,
+                           analysis=sent_analysis,
                            file=audio_files[file]['file'][8:],
                            file_idx=file,
-                           num_sentences=int(len(list(audio_files[file]['sentence_list']))))
+                           num_sentences=int(len(transcript_list)))
 
 
 # TODO add a third route for a third ai

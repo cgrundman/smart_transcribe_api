@@ -34,7 +34,8 @@ def transcription(file):
 
 
 @app.route('/transcribe/<int:file>/analyze', methods=['GET'])
-def analysis(file, text):
+def analysis(file):
+    text = 'text'
     # transcript_list = text.split(".")
     # sentiment_pipeline = pipeline("sentiment-analysis")
     # analysis = sentiment_pipeline(transcript_list)

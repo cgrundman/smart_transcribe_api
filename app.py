@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, render_template
 
 import whisper_timestamped as whisper
 
@@ -68,9 +68,6 @@ def analysis(file):
                            file=audio_files[file]['file'][8:],
                            file_idx=file,
                            num_sentences=int(len(transcript_list)))
-
-
-# TODO add a third route for a third ai
 
 
 if __name__ == '__main__':

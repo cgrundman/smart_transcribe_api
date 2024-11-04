@@ -46,6 +46,8 @@ Install dependencies
 
 ## Acknowledgements
 
+![Logos](https://raw.githubusercontent.com/cgrundman/christian-grundman-website/refs/heads/master/src/images/sta_1.png)
+
  - [Whisper API](https://openai.com/research/whisper)
  - [Hugging Face](https://huggingface.co/blog/sentiment-analysis-python)
 

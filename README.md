@@ -41,7 +41,6 @@ Install dependencies
 ![Transcribe Page](https://github.com/cgrundman/smart_transcribe_api/blob/main/screenshots/transcribe_page.png)
 
 ![Analyze Page](https://github.com/cgrundman/smart_transcribe_api/blob/main/screenshots/analysis_page.png)
-## Acknowledgements
 
 
 ## Acknowledgements
